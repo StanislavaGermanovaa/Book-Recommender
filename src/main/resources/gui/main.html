@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Semantic Library - Catalog</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="dashboard">
+    <div class="top-bar">
+        <h2>📚 Semantic Library</h2>
+        <div>
+            <span style="margin-right: 1rem;">Hello, <strong id="username-display">Guest</strong>!</span>
+            <button class="btn" style="background: #ef4444; padding: 0.5rem 1rem;" onclick="window.location.href='login.html'">Logout</button>
+        </div>
+    </div>
+
+    <div class="discovery-box">
+        <h3 class="section-title">🔍 Discover New Books by Genre</h3>
+
+        <div class="filter-controls">
+            <label for="genre-selector">Choose genre:</label>
+            <select id="genre-selector" onchange="loadBooksByGenre()">
+                <option value="All">All Genres</option>
+            </select>
+        </div>
+
+        <div id="discovery-grid" class="book-grid">
+        </div>
+    </div>
+
+    <div class="bottom-sections">
+
+        <div class="list-box">
+            <h3 style="color: #db2777; margin-top: 0;">❤️ My Liked Books</h3>
+            <div id="liked-books-list">
+                <p style="color: #64748b; font-style: italic;">You haven't liked any books yet. Use the "Like" button above.</p>
+            </div>
+        </div>
+
+        <div class="list-box ai-box">
+            <h3 style="color: #4338ca; margin-top: 0;"> Recommendations for You</h3>
+            <div id="recommendations-list">
+                <p style="color: #64748b; font-style: italic;">Like a few books to trigger the intelligent agent.</p>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    const currentUser = new URLSearchParams(window.location.search).get('user') || 'Guest';
+    document.getElementById('username-display').textContent = currentUser;
+
+    let allBooks = [];
+
+    window.onload = () => {
+        loadDataFromServer();
+    };
+
+    function loadDataFromServer() {
+        console.log("Loading books from Java API...");
+
+        fetch('http://localhost:8080/api/books')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Failed to retrieve data from the server.");
+                }
+                return response.json();
+            })
+            .then(data => {
+                allBooks = data;
+
+                populateGenreDropdown(allBooks);
+
+                loadBooksByGenre();
+
+                updateUserLists(allBooks);
+            })
+            .catch(err => {
+                console.error("Connection error:", err);
+                alert("Грешка при връзката с Java сървъра. Проверете дали е пуснат!");
+            });
+    }
+
+    function populateGenreDropdown(books) {
+        const genreSelector = document.getElementById('genre-selector');
+        const currentSelection = genreSelector.value; // Запазваме текущо избрания филтър
+
+        genreSelector.innerHTML = '<option value="All">All Genres</option>';
+
+        const uniqueGenres = new Set();
+        books.forEach(book => {
+            if (book.genres && Array.isArray(book.genres)) {
+                book.genres.forEach(g => {
+                    if (g.trim() !== "") uniqueGenres.add(g);
+                });
+            }
+        });
+
+        const sortedGenres = Array.from(uniqueGenres).sort();
+        sortedGenres.forEach(genre => {
+            const option = document.createElement('option');
+            option.value = genre;
+            option.textContent = genre.replace(/_/g, ' ');
+            genreSelector.appendChild(option);
+        });
+
+        genreSelector.value = currentSelection; // Възстановяваме избора
+    }
+
+    function loadBooksByGenre() {
+        const selectedGenre = document.getElementById('genre-selector').value;
+        if (selectedGenre === "All") {
+            renderBooks(allBooks);
+        } else {
+            const filtered = allBooks.filter(book => book.genres && book.genres.includes(selectedGenre));
+            renderBooks(filtered);
+        }
+    }
+
+    function renderBooks(books) {
+        const grid = document.getElementById('discovery-grid');
+        if (!grid) return;
+
+        grid.innerHTML = '';
+
+        if (books.length === 0) {
+            grid.innerHTML = '<p style="color: #64748b; font-style: italic; grid-column: 1/-1;">No books found.</p>';
+            return;
+        }
+
+        books.forEach(book => {
+            let tagsHtml = '';
+            if (book.inferredTypes && Array.isArray(book.inferredTypes)) {
+                const cleanTags = book.inferredTypes.filter(tag =>
+                    !tag.startsWith("LikedBy_") && !tag.startsWith("RecommendedTo_")
+                );
+
+                tagsHtml = cleanTags.map(tag =>
+                    `<span class="tag" style="background: #e0e7ff; color: #3730a3; padding: 3px 8px; border-radius: 12px; font-size: 0.8rem; margin-right: 5px; display: inline-block; margin-top: 5px;">${tag}</span>`
+                ).join('');
+            }
+
+            const card = document.createElement('div');
+            card.className = 'book-card';
+            card.innerHTML = `
+                <h3 style="color: var(--primary); margin-bottom: 5px;">${book.name.replace(/_/g, ' ')}</h3>
+                <span style="color: var(--text-muted); font-size: 0.85rem;">Year: ${book.publicationYear > 0 ? book.publicationYear : 'N/A'}</span>
+
+                <div style="font-size: 0.9rem; margin-top: 10px; margin-bottom: 1rem;">
+                    <p style="margin: 4px 0;"><strong>Author:</strong> ${book.authors ? book.authors.join(', ').replace(/_/g, ' ') : 'Unknown'}</p>
+                    <p style="margin: 4px 0;"><strong>Genre:</strong> ${book.genres ? book.genres.join(', ').replace(/_/g, ' ') : 'Unknown'}</p>
+                    <p style="margin: 4px 0;"><strong>Rating:</strong> ${book.ratings ? book.ratings.join(', ') : 'None'}</p>
+                    ${book.seriesName ? `<p style="margin: 4px 0;"><strong>Series:</strong> ${book.seriesName.replace(/_/g, ' ')}</p>` : ''}
+                    <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 8px 0;">
+                    <p style="margin: 4px 0; font-size: 0.85rem; color: #475569;"><strong>Similar Books:</strong> ${book.similarBooks && book.similarBooks.length ? book.similarBooks.join(', ').replace(/_/g, ' ') : '-'}</p>
+                </div>
+
+                <div class="inferred-tags" style="margin-bottom: 15px;">
+                    ${tagsHtml || '<span style="font-size: 0.8rem; color: #94a3b8;">No special characteristics</span>'}
+                </div>
+
+                <div class="action-buttons" style="display: flex; gap: 10px;">
+                    <button class="btn" style="background: #db2777; padding: 0.5rem 1rem;" onclick="sendInteraction('LIKE', '${book.name}')">👍 Like</button>
+                    <button class="btn" style="background: #64748b; padding: 0.5rem 1rem;" onclick="sendInteraction('UNLIKE', '${book.name}')">👎 Unlike</button>
+                </div>
+            `;
+            grid.appendChild(card);
+        });
+    }
+
+    function sendInteraction(action, bookId) {
+        if (currentUser === 'Guest') {
+            alert("Трябва да сте влезли в профила си, за да харесвате книги!");
+            return;
+        }
+
+        console.log(`Изпращане на заявка: ${action} за книга ${bookId}`);
+
+        fetch(`http://localhost:8080/api/books/interact?action=${action}&user=${currentUser}&book=${bookId}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Сървърът върна грешка.");
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                console.log(`Успешно извършено действие: ${action} за книга ${bookId}`);
+                // Презареждаме данните, за да се обновят списъците
+                loadDataFromServer();
+            } else {
+                alert("Възникна грешка при обработката на заявката от агентите.");
+            }
+        })
+        .catch(err => {
+            console.error("Грешка при изпращане на интеракция:", err);
+            alert("Грешка при комуникацията със сървъра.");
+        });
+    }
+
+    function updateUserLists(books) {
+        const likedContainer = document.getElementById('liked-books-list');
+        const recommendContainer = document.getElementById('recommendations-list');
+
+        const likedBooks = books.filter(b => b.inferredTypes && b.inferredTypes.includes("LikedBy_" + currentUser));
+        const recommendedBooks = books.filter(b => b.inferredTypes && b.inferredTypes.includes("RecommendedTo_" + currentUser));
+
+        if (likedBooks.length > 0) {
+            likedContainer.innerHTML = likedBooks.map(b => `<div style="padding: 5px 0; border-bottom: 1px dashed #f3f4f6;">📖 <strong>${b.name.replace(/_/g, ' ')}</strong></div>`).join('');
+        } else {
+            likedContainer.innerHTML = `<p style="color: #64748b; font-style: italic;">You haven't liked any books yet.</p>`;
+        }
+
+        if (recommendedBooks.length > 0) {
+            recommendContainer.innerHTML = recommendedBooks.map(b => `<div style="padding: 5px 0; color: #4338ca;">✨ <strong>${b.name.replace(/_/g, ' ')}</strong></div>`).join('');
+        } else {
+            recommendContainer.innerHTML = `<p style="color: #64748b; font-style: italic;">Like a few books to trigger the intelligent agent.</p>`;
+        }
+    }
+</script>
+</body>
+</html>

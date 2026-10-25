@@ -1,0 +1,144 @@
+
+:root {
+    --primary: #4f46e5;
+    --primary-hover: #4338ca;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --bg-color: #f1f5f9;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text);
+    margin: 0;
+    padding: 0;
+}
+
+/* Общи бутони */
+.btn {
+    background: var(--primary); color: white; border: none;
+    padding: 0.65rem 1rem; border-radius: 6px; cursor: pointer;
+    font-weight: 600; font-size: 0.9rem; transition: all 0.2s;
+}
+.btn:hover { background: var(--primary-hover); transform: translateY(-1px); }
+
+
+
+.dashboard { max-width: 1200px; margin: 2rem auto; width: 95%; }
+.top-bar { display: flex; justify-content: space-between; align-items: center; background: white; padding: 1rem 2rem; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.03); margin-bottom: 2rem; }
+
+.section-title { font-size: 1.5rem; color: var(--text); border-bottom: 3px solid var(--primary); display: inline-block; padding-bottom: 0.5rem; margin-bottom: 1.5rem; }
+
+/* Секция за търсене по жанр (Главен квадрат) */
+.discovery-box { background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 3rem; }
+.filter-controls { display: flex; gap: 1rem; align-items: center; margin-bottom: 2rem; background: #f8fafc; padding: 1rem; border-radius: 8px; border: 1px solid #e2e8f0; }
+.filter-controls select { padding: 0.75rem; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 1rem; font-weight: 600; color: var(--primary); min-width: 200px; cursor: pointer; }
+
+/* Мрежа с книги (Картички) */
+.book-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem; }
+
+.book-card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 1.5rem; transition: transform 0.2s, box-shadow 0.2s; display: flex; flex-direction: column; }
+.book-card:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.08); }
+
+.book-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; }
+.book-title { font-size: 1.25rem; margin: 0; color: #1e293b; font-weight: bold; }
+.book-rating { color: #fbbf24; font-size: 1.1rem; }
+
+.book-details { font-size: 0.9rem; color: #475569; margin-bottom: 1rem; flex-grow: 1; }
+.book-details p { margin: 0.3rem 0; }
+.book-details strong { color: #1e293b; }
+
+/* Тагове за Inferred Types (Характеристики) */
+.inferred-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 1rem 0; padding-top: 1rem; border-top: 1px dashed #cbd5e1; }
+.tag { background: #e0e7ff; color: #4338ca; font-size: 0.75rem; padding: 0.3rem 0.6rem; border-radius: 20px; font-weight: bold; }
+.tag.bestseller { background: #fef08a; color: #854d0e; }
+.tag.recommended { background: #dcfce7; color: #166534; }
+
+/* Бутони за Like / Dislike */
+.action-buttons { display: flex; gap: 0.5rem; margin-top: auto; }
+.btn-action { flex: 1; padding: 0.75rem; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; transition: all 0.2s; display: flex; justify-content: center; align-items: center; gap: 0.5rem; }
+.btn-like { background: #fdf2f8; color: #db2777; border: 1px solid #fbcfe8; }
+.btn-like:hover { background: #fce7f3; }
+.btn-dislike { background: #f1f5f9; color: #64748b; border: 1px solid #e2e8f0; }
+.btn-dislike:hover { background: #e2e8f0; }
+
+/* Секции надолу (Харесани и Препоръчани) */
+.bottom-sections { display: grid; grid-template-columns: 1fr 1.5fr; gap: 2rem; }
+@media (max-width: 900px) { .bottom-sections { grid-template-columns: 1fr; } }
+
+.list-box { background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+.list-box.ai-box { border: 2px solid #a5b4fc; background: #f8fafc; }
+
+.simple-book-item { padding: 0.75rem; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; }
+.simple-book-item:last-child { border-bottom: none; }
+
+
+.login-body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(135deg, #e0e7ff 0%, #f1f5f9 100%);
+}
+
+.auth-container {
+    background: white;
+    padding: 2.5rem;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    border-top: 5px solid var(--primary);
+}
+
+.auth-header h2 { margin-top: 0; color: var(--text); font-size: 1.8rem; margin-bottom: 0.5rem; }
+.auth-header p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 2rem; }
+
+/* Табове */
+.tabs { display: flex; background: #f1f5f9; border-radius: 8px; padding: 0.25rem; margin-bottom: 1.5rem; }
+.tab-btn { flex: 1; padding: 0.6rem; border: none; background: transparent; border-radius: 6px; font-weight: 600; color: var(--text-muted); cursor: pointer; transition: all 0.2s; font-size: 0.95rem; }
+.tab-btn.active { background: white; color: var(--primary); box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+
+/* Форми */
+.form-group { text-align: left; margin-bottom: 1.25rem; }
+.form-group label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.4rem; }
+.form-group input { width: 100%; padding: 0.75rem; border: 1px solid #cbd5e1; border-radius: 8px; box-sizing: border-box; font-size: 1rem; transition: border-color 0.2s; }
+.form-group input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1); }
+.btn-submit { width: 100%; padding: 0.85rem; font-size: 1rem; margin-top: 0.5rem; }
+
+/* Съобщения */
+#message { margin-top: 1rem; font-size: 0.85rem; font-weight: 600; min-height: 20px; }
+.success { color: #10b981; }
+.error { color: #ef4444; }
+
+
+
+
+
+
+
+
+.admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+@media (max-width: 900px) { .admin-grid { grid-template-columns: 1fr; } }
+
+.admin-card { background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 2rem; border-top: 4px solid var(--primary); }
+.admin-card.accent { border-top-color: #10b981; }
+.admin-card h3 { margin-top: 0; color: var(--text); font-size: 1.3rem; margin-bottom: 1.5rem; border-bottom: 2px solid #f1f5f9; padding-bottom: 0.5rem; }
+
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1rem; }
+.form-inline { display: flex; gap: 0.5rem; align-items: flex-end; }
+.form-inline > div { flex: 1; }
+
+.target-book-box { background: #f0fdf4; padding: 1rem; border-radius: 8px; border: 1px solid #bbf7d0; margin-bottom: 1.5rem; }
+.target-book-box label { color: #166534; font-size: 0.95rem; }
+.required-badge { background: #fee2e2; color: #ef4444; font-size: 0.75rem; padding: 0.2rem 0.5rem; border-radius: 4px; font-weight: bold; margin-left: 0.5rem; }
+
+.logs-area { background: #0f172a; color: #38bdf8; font-family: 'Consolas', 'Courier New', monospace; padding: 1.5rem; border-radius: 8px; height: 600px; overflow-y: auto; font-size: 0.9rem; line-height: 1.6; border: 1px solid #334155; }
+.logs-area hr { border-color: #334155; margin: 1rem 0; }
+
+.btn-danger { background: #ef4444; }
+.btn-danger:hover { background: #dc2626; }
+.btn-success { background: #10b981; }
+.btn-success:hover { background: #059669; }

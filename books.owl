@@ -1,0 +1,1083 @@
+<rdf:RDF
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns="http://www.semanticweb.org/stany/ontologies/2026/5/untitled-ontology-25/"
+    xmlns:swrlb="http://www.w3.org/2003/11/swrlb#"
+    xmlns:books="http://www.semanticweb.org/ontologies/books#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:swrl="http://www.w3.org/2003/11/swrl#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#">
+  <owl:Ontology rdf:about=""/>
+  <owl:Class rdf:ID="ClassicBook">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Class rdf:ID="Book"/>
+          <owl:Restriction>
+            <owl:someValuesFrom>
+              <rdfs:Datatype>
+                <owl:withRestrictions rdf:parseType="Collection">
+                  <rdf:Description>
+                    <xsd:maxInclusive rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                    >1980</xsd:maxInclusive>
+                  </rdf:Description>
+                </owl:withRestrictions>
+                <owl:onDatatype rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+              </rdfs:Datatype>
+            </owl:someValuesFrom>
+            <owl:onProperty>
+              <owl:FunctionalProperty rdf:ID="hasPublicationYear"/>
+            </owl:onProperty>
+          </owl:Restriction>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:ID="CultClassic">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Class rdf:ID="Bestseller"/>
+          <owl:Class rdf:about="#ClassicBook"/>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:ID="AudioPublisher">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="Publisher"/>
+    </rdfs:subClassOf>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="#Publisher"/>
+          <owl:Restriction>
+            <owl:someValuesFrom>
+              <owl:Class rdf:ID="AudioBook"/>
+            </owl:someValuesFrom>
+            <owl:onProperty>
+              <owl:IrreflexiveProperty rdf:ID="isPublisherOf">
+                <rdfs:range rdf:resource="#Book"/>
+                <rdfs:domain rdf:resource="#Publisher"/>
+                <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AsymmetricProperty"/>
+                <owl:inverseOf>
+                  <owl:IrreflexiveProperty rdf:ID="publishedBy">
+                    <rdfs:range rdf:resource="#Publisher"/>
+                    <rdfs:domain rdf:resource="#Book"/>
+                    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AsymmetricProperty"/>
+                    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+                    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+                    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+                  </owl:IrreflexiveProperty>
+                </owl:inverseOf>
+                <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+                <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+              </owl:IrreflexiveProperty>
+            </owl:onProperty>
+          </owl:Restriction>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:ID="BestsellingPublisher">
+    <rdfs:subClassOf rdf:resource="#Publisher"/>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="#Publisher"/>
+          <owl:Restriction>
+            <owl:someValuesFrom>
+              <owl:Class rdf:about="#Bestseller"/>
+            </owl:someValuesFrom>
+            <owl:onProperty rdf:resource="#isPublisherOf"/>
+          </owl:Restriction>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:ID="Author"/>
+  <owl:Class rdf:about="#AudioBook">
+    <rdfs:subClassOf rdf:resource="#Book"/>
+  </owl:Class>
+  <owl:Class rdf:ID="RecommendedFantasy">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="#Bestseller"/>
+          <owl:Restriction>
+            <owl:someValuesFrom>
+              <books:Fantasy rdf:ID="Fantasy">
+                <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+                <rdfs:subClassOf>
+                  <owl:Class rdf:ID="Fiction"/>
+                </rdfs:subClassOf>
+                <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+              </books:Fantasy>
+            </owl:someValuesFrom>
+            <owl:onProperty>
+              <owl:IrreflexiveProperty rdf:ID="hasGenre">
+                <rdfs:range>
+                  <owl:Class rdf:ID="Genre"/>
+                </rdfs:range>
+                <rdfs:domain rdf:resource="#Book"/>
+                <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AsymmetricProperty"/>
+                <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+                <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+                <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+              </owl:IrreflexiveProperty>
+            </owl:onProperty>
+          </owl:Restriction>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:ID="RecommendedHistoricalFiction">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="#Bestseller"/>
+          <owl:Restriction>
+            <owl:someValuesFrom>
+              <books:HistoricalFiction rdf:ID="HistoricalFiction">
+                <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+                <rdfs:subClassOf>
+                  <owl:Class rdf:about="#Fiction"/>
+                </rdfs:subClassOf>
+                <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+              </books:HistoricalFiction>
+            </owl:someValuesFrom>
+            <owl:onProperty rdf:resource="#hasGenre"/>
+          </owl:Restriction>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:about="#Bestseller">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="#Book"/>
+          <owl:Restriction>
+            <owl:hasValue>
+              <books:BookRating rdf:ID="FiveStar">
+                <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+              </books:BookRating>
+            </owl:hasValue>
+            <owl:onProperty>
+              <owl:IrreflexiveProperty rdf:ID="hasRating">
+                <rdfs:range>
+                  <owl:Class rdf:ID="BookRating"/>
+                </rdfs:range>
+                <rdfs:domain rdf:resource="#Book"/>
+                <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AsymmetricProperty"/>
+                <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+                <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+                <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+              </owl:IrreflexiveProperty>
+            </owl:onProperty>
+          </owl:Restriction>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:ID="PrintBestSeller">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="#Bestseller"/>
+          <owl:Class rdf:ID="PrintBook"/>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:ID="SciFiAuthor">
+    <rdfs:subClassOf rdf:resource="#Author"/>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="#Author"/>
+          <owl:Restriction>
+            <owl:someValuesFrom>
+              <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                  <owl:Class rdf:about="#Book"/>
+                  <owl:Restriction>
+                    <owl:someValuesFrom>
+                      <books:SciFi rdf:ID="SciFi">
+                        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+                        <rdfs:subClassOf>
+                          <owl:Class rdf:about="#Fiction"/>
+                        </rdfs:subClassOf>
+                        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+                      </books:SciFi>
+                    </owl:someValuesFrom>
+                    <owl:onProperty rdf:resource="#hasGenre"/>
+                  </owl:Restriction>
+                </owl:intersectionOf>
+              </owl:Class>
+            </owl:someValuesFrom>
+            <owl:onProperty>
+              <owl:IrreflexiveProperty rdf:ID="authorOf">
+                <rdfs:range rdf:resource="#Book"/>
+                <rdfs:domain rdf:resource="#Author"/>
+                <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AsymmetricProperty"/>
+                <owl:inverseOf>
+                  <owl:IrreflexiveProperty rdf:ID="writtenBy">
+                    <rdfs:range rdf:resource="#Author"/>
+                    <rdfs:domain rdf:resource="#Book"/>
+                    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AsymmetricProperty"/>
+                    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+                    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+                    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+                  </owl:IrreflexiveProperty>
+                </owl:inverseOf>
+                <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+                <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+              </owl:IrreflexiveProperty>
+            </owl:onProperty>
+          </owl:Restriction>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:ID="RecommendedHorror">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="#Bestseller"/>
+          <owl:Restriction>
+            <owl:someValuesFrom>
+              <books:Horror rdf:ID="Horror">
+                <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+                <rdfs:subClassOf>
+                  <owl:Class rdf:about="#Fiction"/>
+                </rdfs:subClassOf>
+                <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+              </books:Horror>
+            </owl:someValuesFrom>
+            <owl:onProperty rdf:resource="#hasGenre"/>
+          </owl:Restriction>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:ID="User"/>
+  <owl:Class rdf:ID="AudioBestseller">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="#AudioBook"/>
+          <owl:Class rdf:about="#Bestseller"/>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:ID="FantasyAuthor">
+    <rdfs:subClassOf rdf:resource="#Author"/>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="#Author"/>
+          <owl:Restriction>
+            <owl:someValuesFrom>
+              <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                  <owl:Class rdf:about="#Book"/>
+                  <owl:Restriction>
+                    <owl:someValuesFrom rdf:resource="#Fantasy"/>
+                    <owl:onProperty rdf:resource="#hasGenre"/>
+                  </owl:Restriction>
+                </owl:intersectionOf>
+              </owl:Class>
+            </owl:someValuesFrom>
+            <owl:onProperty rdf:resource="#authorOf"/>
+          </owl:Restriction>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:about="#Fiction">
+    <owl:disjointWith>
+      <owl:Class rdf:ID="NonFiction"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf rdf:resource="#Genre"/>
+  </owl:Class>
+  <owl:Class rdf:ID="RecommendedActionAdventure">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="#Bestseller"/>
+          <owl:Restriction>
+            <owl:someValuesFrom>
+              <books:ActionAdventure rdf:ID="ActionAdventure">
+                <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+                <rdfs:subClassOf rdf:resource="#Fiction"/>
+                <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+              </books:ActionAdventure>
+            </owl:someValuesFrom>
+            <owl:onProperty rdf:resource="#hasGenre"/>
+          </owl:Restriction>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:ID="EBestSeller">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="#Bestseller"/>
+          <owl:Class rdf:ID="EBook"/>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:ID="BestsellingAuthor">
+    <rdfs:subClassOf rdf:resource="#Author"/>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="#Author"/>
+          <owl:Restriction>
+            <owl:someValuesFrom rdf:resource="#Bestseller"/>
+            <owl:onProperty rdf:resource="#authorOf"/>
+          </owl:Restriction>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:ID="RecommendedSciFi">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="#Bestseller"/>
+          <owl:Restriction>
+            <owl:someValuesFrom rdf:resource="#SciFi"/>
+            <owl:onProperty rdf:resource="#hasGenre"/>
+          </owl:Restriction>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:ID="RecommendedMystery">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="#Bestseller"/>
+          <owl:Restriction>
+            <owl:someValuesFrom>
+              <books:Mystery rdf:ID="Mystery">
+                <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+                <rdfs:subClassOf rdf:resource="#Fiction"/>
+                <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+              </books:Mystery>
+            </owl:someValuesFrom>
+            <owl:onProperty rdf:resource="#hasGenre"/>
+          </owl:Restriction>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:ID="RecommendedRomance">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="#Bestseller"/>
+          <owl:Restriction>
+            <owl:someValuesFrom>
+              <books:Romance rdf:ID="Romance">
+                <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+                <rdfs:subClassOf rdf:resource="#Fiction"/>
+                <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+              </books:Romance>
+            </owl:someValuesFrom>
+            <owl:onProperty rdf:resource="#hasGenre"/>
+          </owl:Restriction>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:ID="RecommendedHistory">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="#Bestseller"/>
+          <owl:Restriction>
+            <owl:someValuesFrom>
+              <books:History rdf:ID="History">
+                <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+                <rdfs:subClassOf>
+                  <owl:Class rdf:about="#NonFiction"/>
+                </rdfs:subClassOf>
+                <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+              </books:History>
+            </owl:someValuesFrom>
+            <owl:onProperty rdf:resource="#hasGenre"/>
+          </owl:Restriction>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:ID="SeriesFirstVolume">
+    <rdfs:subClassOf rdf:resource="#Book"/>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="#Book"/>
+          <owl:Restriction>
+            <owl:someValuesFrom>
+              <owl:Class rdf:ID="BookSeries"/>
+            </owl:someValuesFrom>
+            <owl:onProperty>
+              <owl:IrreflexiveProperty rdf:ID="isPartOfSeries">
+                <rdfs:range rdf:resource="#BookSeries"/>
+                <rdfs:domain rdf:resource="#Book"/>
+                <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+                <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+                <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+              </owl:IrreflexiveProperty>
+            </owl:onProperty>
+          </owl:Restriction>
+          <owl:Restriction>
+            <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#integer"
+            >1</owl:hasValue>
+            <owl:onProperty>
+              <owl:FunctionalProperty rdf:ID="hasSeriesOrder"/>
+            </owl:onProperty>
+          </owl:Restriction>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:ID="AverageBook">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="#Book"/>
+          <owl:Restriction>
+            <owl:hasValue>
+              <books:BookRating rdf:ID="ThreeStar">
+                <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+              </books:BookRating>
+            </owl:hasValue>
+            <owl:onProperty rdf:resource="#hasRating"/>
+          </owl:Restriction>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:about="#PrintBook">
+    <rdfs:subClassOf rdf:resource="#Book"/>
+  </owl:Class>
+  <owl:Class rdf:about="#NonFiction">
+    <rdfs:subClassOf rdf:resource="#Genre"/>
+  </owl:Class>
+  <owl:Class rdf:about="#BookRating">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:oneOf rdf:parseType="Collection">
+          <books:BookRating rdf:about="#FiveStar"/>
+          <books:BookRating rdf:ID="FourStar">
+            <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+          </books:BookRating>
+          <books:BookRating rdf:ID="OneStar">
+            <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+          </books:BookRating>
+          <books:BookRating rdf:about="#ThreeStar"/>
+          <books:BookRating rdf:ID="TwoStar">
+            <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+          </books:BookRating>
+        </owl:oneOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:ID="AwardWinningSciFi">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="#Bestseller"/>
+          <owl:Restriction>
+            <owl:someValuesFrom rdf:resource="#Mystery"/>
+            <owl:onProperty rdf:resource="#hasGenre"/>
+          </owl:Restriction>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:ID="SciFiPublisher">
+    <rdfs:subClassOf rdf:resource="#Publisher"/>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="#Publisher"/>
+          <owl:Restriction>
+            <owl:someValuesFrom>
+              <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                  <owl:Class rdf:about="#Book"/>
+                  <owl:Restriction>
+                    <owl:someValuesFrom rdf:resource="#SciFi"/>
+                    <owl:onProperty rdf:resource="#hasGenre"/>
+                  </owl:Restriction>
+                </owl:intersectionOf>
+              </owl:Class>
+            </owl:someValuesFrom>
+            <owl:onProperty rdf:resource="#isPublisherOf"/>
+          </owl:Restriction>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:ID="GlobalPublisher">
+    <rdfs:subClassOf rdf:resource="#Publisher"/>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="#Publisher"/>
+          <owl:Restriction>
+            <owl:someValuesFrom>
+              <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                  <owl:Class rdf:about="#Book"/>
+                  <owl:Restriction>
+                    <owl:someValuesFrom rdf:resource="#Fiction"/>
+                    <owl:onProperty rdf:resource="#hasGenre"/>
+                  </owl:Restriction>
+                </owl:intersectionOf>
+              </owl:Class>
+            </owl:someValuesFrom>
+            <owl:onProperty rdf:resource="#isPublisherOf"/>
+          </owl:Restriction>
+          <owl:Restriction>
+            <owl:someValuesFrom>
+              <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                  <owl:Class rdf:about="#Book"/>
+                  <owl:Restriction>
+                    <owl:someValuesFrom rdf:resource="#NonFiction"/>
+                    <owl:onProperty rdf:resource="#hasGenre"/>
+                  </owl:Restriction>
+                </owl:intersectionOf>
+              </owl:Class>
+            </owl:someValuesFrom>
+            <owl:onProperty rdf:resource="#isPublisherOf"/>
+          </owl:Restriction>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:ID="DebutingAuthor">
+    <rdfs:subClassOf rdf:resource="#Author"/>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="#Author"/>
+          <owl:Restriction>
+            <owl:onClass rdf:resource="#Book"/>
+            <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger"
+            >1</owl:qualifiedCardinality>
+            <owl:onProperty rdf:resource="#authorOf"/>
+          </owl:Restriction>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:ID="RecommendedDrama">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="#Bestseller"/>
+          <owl:Restriction>
+            <owl:someValuesFrom>
+              <books:Drama rdf:ID="Drama">
+                <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+                <rdfs:subClassOf rdf:resource="#Fiction"/>
+                <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+              </books:Drama>
+            </owl:someValuesFrom>
+            <owl:onProperty rdf:resource="#hasGenre"/>
+          </owl:Restriction>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:ID="ProlificAuthor">
+    <rdfs:subClassOf rdf:resource="#Author"/>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="#Author"/>
+          <owl:Restriction>
+            <owl:someValuesFrom>
+              <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                  <owl:Class rdf:about="#Book"/>
+                  <owl:Restriction>
+                    <owl:someValuesFrom rdf:resource="#Fiction"/>
+                    <owl:onProperty rdf:resource="#hasGenre"/>
+                  </owl:Restriction>
+                </owl:intersectionOf>
+              </owl:Class>
+            </owl:someValuesFrom>
+            <owl:onProperty rdf:resource="#authorOf"/>
+          </owl:Restriction>
+          <owl:Restriction>
+            <owl:someValuesFrom>
+              <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                  <owl:Class rdf:about="#Book"/>
+                  <owl:Restriction>
+                    <owl:someValuesFrom rdf:resource="#NonFiction"/>
+                    <owl:onProperty rdf:resource="#hasGenre"/>
+                  </owl:Restriction>
+                </owl:intersectionOf>
+              </owl:Class>
+            </owl:someValuesFrom>
+            <owl:onProperty rdf:resource="#authorOf"/>
+          </owl:Restriction>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:ID="SeriesSequel">
+    <rdfs:subClassOf rdf:resource="#Book"/>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="#Book"/>
+          <owl:Restriction>
+            <owl:someValuesFrom rdf:resource="#BookSeries"/>
+            <owl:onProperty rdf:resource="#isPartOfSeries"/>
+          </owl:Restriction>
+          <owl:Restriction>
+            <owl:someValuesFrom>
+              <rdfs:Datatype>
+                <owl:withRestrictions rdf:parseType="Collection">
+                  <rdf:Description>
+                    <xsd:minInclusive rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                    >2</xsd:minInclusive>
+                  </rdf:Description>
+                </owl:withRestrictions>
+                <owl:onDatatype rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+              </rdfs:Datatype>
+            </owl:someValuesFrom>
+            <owl:onProperty>
+              <owl:FunctionalProperty rdf:about="#hasSeriesOrder"/>
+            </owl:onProperty>
+          </owl:Restriction>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:ID="ModernClassic">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="#ClassicBook"/>
+          <owl:Restriction>
+            <owl:someValuesFrom>
+              <rdfs:Datatype>
+                <owl:withRestrictions rdf:parseType="Collection">
+                  <rdf:Description>
+                    <xsd:minInclusive rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                    >1950</xsd:minInclusive>
+                  </rdf:Description>
+                </owl:withRestrictions>
+                <owl:onDatatype rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+              </rdfs:Datatype>
+            </owl:someValuesFrom>
+            <owl:onProperty>
+              <owl:FunctionalProperty rdf:about="#hasPublicationYear"/>
+            </owl:onProperty>
+          </owl:Restriction>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:ID="VintageFantasy">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="#ClassicBook"/>
+          <owl:Restriction>
+            <owl:someValuesFrom rdf:resource="#Fantasy"/>
+            <owl:onProperty rdf:resource="#hasGenre"/>
+          </owl:Restriction>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:ID="RecommendedScience">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="#Bestseller"/>
+          <owl:Restriction>
+            <owl:someValuesFrom>
+              <books:Science rdf:ID="Science">
+                <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+                <rdfs:subClassOf rdf:resource="#NonFiction"/>
+                <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+              </books:Science>
+            </owl:someValuesFrom>
+            <owl:onProperty rdf:resource="#hasGenre"/>
+          </owl:Restriction>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:ID="RecommendedSelfHelp">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="#Bestseller"/>
+          <owl:Restriction>
+            <owl:someValuesFrom>
+              <books:SelfHelp rdf:ID="SelfHelp">
+                <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+                <rdfs:subClassOf rdf:resource="#NonFiction"/>
+                <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+              </books:SelfHelp>
+            </owl:someValuesFrom>
+            <owl:onProperty rdf:resource="#hasGenre"/>
+          </owl:Restriction>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:ID="FantasyPublisher">
+    <rdfs:subClassOf rdf:resource="#Publisher"/>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="#Publisher"/>
+          <owl:Restriction>
+            <owl:someValuesFrom>
+              <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                  <owl:Class rdf:about="#Book"/>
+                  <owl:Restriction>
+                    <owl:someValuesFrom rdf:resource="#Fantasy"/>
+                    <owl:onProperty rdf:resource="#hasGenre"/>
+                  </owl:Restriction>
+                </owl:intersectionOf>
+              </owl:Class>
+            </owl:someValuesFrom>
+            <owl:onProperty rdf:resource="#isPublisherOf"/>
+          </owl:Restriction>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:ID="ClassicAuthor">
+    <rdfs:subClassOf rdf:resource="#Author"/>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="#Author"/>
+          <owl:Restriction>
+            <owl:someValuesFrom rdf:resource="#ClassicBook"/>
+            <owl:onProperty rdf:resource="#authorOf"/>
+          </owl:Restriction>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:about="#EBook">
+    <rdfs:subClassOf rdf:resource="#Book"/>
+  </owl:Class>
+  <owl:Class rdf:ID="GoodBook">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="#Book"/>
+          <owl:Restriction>
+            <owl:hasValue rdf:resource="#FourStar"/>
+            <owl:onProperty rdf:resource="#hasRating"/>
+          </owl:Restriction>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:ObjectProperty rdf:ID="hasLiked">
+    <rdfs:range rdf:resource="#Book"/>
+    <rdfs:domain rdf:resource="#User"/>
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasRecommendedBook">
+    <rdfs:range rdf:resource="#Book"/>
+    <rdfs:domain rdf:resource="#User"/>
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasSameAuthorBook">
+    <owl:propertyChainAxiom rdf:parseType="Collection">
+      <owl:IrreflexiveProperty rdf:about="#writtenBy"/>
+      <owl:IrreflexiveProperty rdf:about="#authorOf"/>
+    </owl:propertyChainAxiom>
+    <rdfs:range rdf:resource="#Book"/>
+    <rdfs:domain rdf:resource="#Book"/>
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+  </owl:ObjectProperty>
+  <owl:DatatypeProperty rdf:ID="hasPassword">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#User"/>
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+  </owl:DatatypeProperty>
+  <owl:TransitiveProperty rdf:ID="isSimilarTo">
+    <rdfs:range rdf:resource="#Book"/>
+    <rdfs:domain rdf:resource="#Book"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#SymmetricProperty"/>
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+  </owl:TransitiveProperty>
+  <owl:FunctionalProperty rdf:about="#hasSeriesOrder">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:domain rdf:resource="#Book"/>
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+  </owl:FunctionalProperty>
+  <owl:FunctionalProperty rdf:about="#hasPublicationYear">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:domain rdf:resource="#Book"/>
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+  </owl:FunctionalProperty>
+  <books:Author rdf:ID="Harper_Lee">
+    <books:authorOf>
+      <books:PrintBook rdf:ID="To_Kill_a_Mockingbird">
+        <books:hasPublicationYear rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >1960</books:hasPublicationYear>
+        <books:hasRating rdf:resource="#FiveStar"/>
+        <books:hasGenre rdf:resource="#Fantasy"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+      </books:PrintBook>
+    </books:authorOf>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  </books:Author>
+  <books:Publisher rdf:ID="J_B_Lippincott">
+    <books:isPublisherOf rdf:resource="#To_Kill_a_Mockingbird"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  </books:Publisher>
+  <books:PrintBook rdf:ID="test2"/>
+  <books:PrintBook rdf:ID="test"/>
+  <owl:AllDisjointClasses>
+    <owl:members rdf:parseType="Collection">
+      <owl:Class rdf:about="#Author"/>
+      <owl:Class rdf:about="#Book"/>
+      <owl:Class rdf:about="#BookRating"/>
+      <owl:Class rdf:about="#Genre"/>
+      <owl:Class rdf:about="#Publisher"/>
+    </owl:members>
+  </owl:AllDisjointClasses>
+  <books:PrintBook rdf:ID="The_Shining">
+    <books:hasPublicationYear rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >1977</books:hasPublicationYear>
+    <books:writtenBy>
+      <books:Author rdf:ID="Stephen_King">
+        <books:authorOf>
+          <books:PrintBook rdf:ID="It_Novel">
+            <books:hasPublicationYear rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >1986</books:hasPublicationYear>
+            <books:writtenBy rdf:resource="#Stephen_King"/>
+            <books:publishedBy>
+              <books:Publisher rdf:ID="Viking_Press">
+                <books:isPublisherOf rdf:resource="#It_Novel"/>
+                <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+              </books:Publisher>
+            </books:publishedBy>
+            <books:hasRating rdf:resource="#FiveStar"/>
+            <books:hasGenre rdf:resource="#Horror"/>
+            <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+          </books:PrintBook>
+        </books:authorOf>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+      </books:Author>
+    </books:writtenBy>
+    <books:isSimilarTo rdf:resource="#It_Novel"/>
+    <books:hasRating rdf:resource="#FiveStar"/>
+    <books:hasGenre rdf:resource="#Horror"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  </books:PrintBook>
+  <books:PrintBook rdf:ID="The_Cuckoos_Calling">
+    <books:hasPublicationYear rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >2013</books:hasPublicationYear>
+    <books:writtenBy>
+      <books:Author rdf:ID="J_K_Rowling">
+        <books:authorOf>
+          <books:PrintBook rdf:ID="Harry_Potter_2">
+            <books:hasSeriesOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >2</books:hasSeriesOrder>
+            <books:hasPublicationYear rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >1998</books:hasPublicationYear>
+            <books:writtenBy rdf:resource="#J_K_Rowling"/>
+            <books:publishedBy>
+              <books:Publisher rdf:ID="Bloomsbury">
+                <books:isPublisherOf>
+                  <books:PrintBook rdf:ID="The_Hobbit">
+                    <books:hasSeriesOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                    >1</books:hasSeriesOrder>
+                    <books:hasPublicationYear rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                    >1937</books:hasPublicationYear>
+                    <books:writtenBy>
+                      <books:Author rdf:ID="J_R_R_Tolkien">
+                        <books:authorOf rdf:resource="#The_Hobbit"/>
+                        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+                      </books:Author>
+                    </books:writtenBy>
+                    <books:publishedBy rdf:resource="#Bloomsbury"/>
+                    <books:isSimilarTo>
+                      <books:PrintBook rdf:ID="Harry_Potter_1">
+                        <books:hasGenre rdf:resource="#Fantasy"/>
+                        <books:hasSeriesOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                        >1</books:hasSeriesOrder>
+                        <books:hasRating rdf:resource="#FiveStar"/>
+                        <books:isPartOfSeries>
+                          <books:BookSeries rdf:ID="Harry_Potter_Series">
+                            <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+                          </books:BookSeries>
+                        </books:isPartOfSeries>
+                        <books:publishedBy rdf:resource="#Bloomsbury"/>
+                        <books:hasPublicationYear rdf:datatype=
+                        "http://www.w3.org/2001/XMLSchema#int"
+                        >1997</books:hasPublicationYear>
+                        <books:writtenBy rdf:resource="#J_K_Rowling"/>
+                        <books:isSimilarTo rdf:resource="#Harry_Potter_2"/>
+                        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+                      </books:PrintBook>
+                    </books:isSimilarTo>
+                    <books:hasRating rdf:resource="#FiveStar"/>
+                    <books:hasGenre rdf:resource="#Fantasy"/>
+                    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+                  </books:PrintBook>
+                </books:isPublisherOf>
+                <books:isPublisherOf rdf:resource="#Harry_Potter_2"/>
+                <books:isPublisherOf rdf:resource="#Harry_Potter_1"/>
+                <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+              </books:Publisher>
+            </books:publishedBy>
+            <books:isPartOfSeries rdf:resource="#Harry_Potter_Series"/>
+            <books:hasRating rdf:resource="#FiveStar"/>
+            <books:hasGenre rdf:resource="#Fantasy"/>
+            <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+          </books:PrintBook>
+        </books:authorOf>
+        <books:authorOf rdf:resource="#Harry_Potter_1"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+      </books:Author>
+    </books:writtenBy>
+    <books:hasRating rdf:resource="#FourStar"/>
+    <books:hasGenre rdf:resource="#Mystery"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  </books:PrintBook>
+  <books:PrintBook rdf:ID="The_Green_Mile">
+    <books:hasPublicationYear rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >1996</books:hasPublicationYear>
+    <books:writtenBy rdf:resource="#Stephen_King"/>
+    <books:hasRating rdf:resource="#FourStar"/>
+    <books:hasGenre rdf:resource="#Drama"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  </books:PrintBook>
+  <swrl:Imp>
+    <swrl:head>
+      <swrl:AtomList>
+        <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+        <rdf:first>
+          <swrl:IndividualPropertyAtom>
+            <swrl:argument2>
+              <swrl:Variable rdf:about="urn:swrl:var#b2"/>
+            </swrl:argument2>
+            <swrl:argument1>
+              <swrl:Variable rdf:about="urn:swrl:var#u"/>
+            </swrl:argument1>
+            <swrl:propertyPredicate rdf:resource="#hasRecommendedBook"/>
+          </swrl:IndividualPropertyAtom>
+        </rdf:first>
+      </swrl:AtomList>
+    </swrl:head>
+    <swrl:body>
+      <swrl:AtomList>
+        <rdf:rest>
+          <swrl:AtomList>
+            <rdf:rest>
+              <swrl:AtomList>
+                <rdf:rest>
+                  <swrl:AtomList>
+                    <rdf:rest>
+                      <swrl:AtomList>
+                        <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                        <rdf:first>
+                          <swrl:IndividualPropertyAtom>
+                            <swrl:argument2 rdf:resource="urn:swrl:var#b2"/>
+                            <swrl:argument1>
+                              <swrl:Variable rdf:about="urn:swrl:var#b1"/>
+                            </swrl:argument1>
+                            <swrl:propertyPredicate rdf:resource="#isSimilarTo"/>
+                          </swrl:IndividualPropertyAtom>
+                        </rdf:first>
+                      </swrl:AtomList>
+                    </rdf:rest>
+                    <rdf:first>
+                      <swrl:IndividualPropertyAtom>
+                        <swrl:argument2 rdf:resource="urn:swrl:var#b1"/>
+                        <swrl:argument1 rdf:resource="urn:swrl:var#u"/>
+                        <swrl:propertyPredicate rdf:resource="#hasLiked"/>
+                      </swrl:IndividualPropertyAtom>
+                    </rdf:first>
+                  </swrl:AtomList>
+                </rdf:rest>
+                <rdf:first>
+                  <swrl:ClassAtom>
+                    <swrl:argument1 rdf:resource="urn:swrl:var#b2"/>
+                    <swrl:classPredicate rdf:resource="#Book"/>
+                  </swrl:ClassAtom>
+                </rdf:first>
+              </swrl:AtomList>
+            </rdf:rest>
+            <rdf:first>
+              <swrl:ClassAtom>
+                <swrl:argument1 rdf:resource="urn:swrl:var#b1"/>
+                <swrl:classPredicate rdf:resource="#Book"/>
+              </swrl:ClassAtom>
+            </rdf:first>
+          </swrl:AtomList>
+        </rdf:rest>
+        <rdf:first>
+          <swrl:ClassAtom>
+            <swrl:argument1 rdf:resource="urn:swrl:var#u"/>
+            <swrl:classPredicate rdf:resource="#User"/>
+          </swrl:ClassAtom>
+        </rdf:first>
+      </swrl:AtomList>
+    </swrl:body>
+  </swrl:Imp>
+  <books:User rdf:ID="Ivan">
+    <books:hasLiked rdf:resource="#To_Kill_a_Mockingbird"/>
+    <books:hasPassword>1234</books:hasPassword>
+    <books:hasLiked rdf:resource="#Harry_Potter_1"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  </books:User>
+  <books:PrintBook rdf:ID="The_Lord_of_the_Rings">
+    <books:hasPublicationYear rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >1954</books:hasPublicationYear>
+    <books:writtenBy rdf:resource="#J_R_R_Tolkien"/>
+    <books:publishedBy>
+      <books:Publisher rdf:ID="George_Allen_Unwin">
+        <books:isPublisherOf rdf:resource="#The_Lord_of_the_Rings"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+      </books:Publisher>
+    </books:publishedBy>
+    <books:isSimilarTo rdf:resource="#Harry_Potter_1"/>
+    <books:hasRating rdf:resource="#FiveStar"/>
+    <books:hasGenre rdf:resource="#Fantasy"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  </books:PrintBook>
+  <books:Biography rdf:ID="Biography">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:subClassOf rdf:resource="#NonFiction"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </books:Biography>
+  <books:Philosophy rdf:ID="Philosophy">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:subClassOf rdf:resource="#NonFiction"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </books:Philosophy>
+</rdf:RDF>

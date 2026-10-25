@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Book Recommender Agent</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="dashboard">
+    <div class="top-bar">
+        <h2>⚙️ Ontology Management</h2>
+    </div>
+
+    <div class="admin-grid">
+
+        <div>
+            <div class="admin-card">
+                <h3>1. Create New Book (Book Instance)</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Unique Book</label>
+                        <input type="text" id="new-book-id" placeholder="e.g. 1984_Orwell">
+                    </div>
+                    <div class="form-group">
+                        <label>Format (Ontology Class)</label>
+                        <select id="new-book-format">
+                            <option value="PrintBook">PrintBook</option>
+                            <option value="EBook">EBook</option>
+                            <option value="Audiobook">Audiobook</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="btn btn-success" style="width: 100%;" onclick="createBook()">➕ Add Book to System</button>
+            </div>
+
+            <div class="admin-card accent">
+                <h3>2. Manage Relations and Properties</h3>
+
+                <div class="target-book-box form-group">
+                    <label>Target Book <span class="required-badge">Required</span></label>
+                    <input type="text" id="target-book" placeholder="Enter Book ID to edit...">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group form-inline">
+                        <div>
+                            <label>Author Name</label>
+                            <input type="text" id="author-name" placeholder="George_Orwell">
+                        </div>
+                        <button class="btn" onclick="linkProperty('author', 'author-name')">Link</button>
+                    </div>
+                    <div class="form-group form-inline">
+                        <div>
+                            <label>Genre</label>
+                            <select id="genre-select">
+                                <option value="SciFi">SciFi</option>
+                                <option value="Fantasy">Fantasy</option>
+                                <option value="Mystery">Mystery</option>
+                                <option value="Drama">Drama</option>
+                                <option value="Horror">Horror</option>
+                                <option value="Biography">Biography</option>
+                                <option value="History">History</option>
+                                <option value="SelfHelp">SelfHelp</option>
+                                <option value="Science">Science</option>
+                            </select>
+                        </div>
+                        <button class="btn" onclick="linkProperty('genre', 'genre-select')">Link</button>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group form-inline">
+                        <div>
+                            <label>Rating</label>
+                            <select id="rating-select">
+                                <option value="FiveStar">FiveStar ⭐⭐⭐⭐⭐</option>
+                                <option value="FourStar">FourStar ⭐⭐⭐⭐</option>
+                                <option value="ThreeStar">ThreeStar ⭐⭐⭐</option>
+                                <option value="TwoStar">TwoStar ⭐⭐</option>
+                                <option value="OneStar">OneStar ⭐</option>
+                            </select>
+                        </div>
+                        <button class="btn" onclick="linkProperty('rating', 'rating-select')">Link</button>
+                    </div>
+                    <div class="form-group form-inline">
+                        <div>
+                            <label>Publisher</label>
+                            <input type="text" id="publisher-name" placeholder="Secker_Warburg">
+                        </div>
+                        <button class="btn" onclick="linkProperty('publisher', 'publisher-name')">Link</button>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group form-inline">
+                        <div>
+                            <label>Series Name</label>
+                            <input type="text" id="series-name" placeholder="Dystopia_Classics">
+                        </div>
+                        <button class="btn" onclick="linkProperty('series', 'series-name')">Link</button>
+                    </div>
+                    <div class="form-group form-inline">
+                        <div>
+                            <label>Series Order</label>
+                            <input type="number" id="series-order" placeholder="1">
+                        </div>
+                        <button class="btn" onclick="linkProperty('order', 'series-order')">Save</button>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group form-inline">
+                        <div>
+                            <label>Similar Book (ID)</label>
+                            <input type="text" id="similar-book" placeholder="Fahrenheit_451">
+                        </div>
+                        <button class="btn" onclick="linkProperty('similar', 'similar-book')">Link</button>
+                    </div>
+                    <div class="form-group form-inline">
+                        <div>
+                            <label>Publication Year</label>
+                            <input type="number" id="pub-year" placeholder="1949">
+                        </div>
+                        <button class="btn" onclick="linkProperty('year', 'pub-year')">Save</button>
+                    </div>
+                </div>
+
+                <button class="btn btn-danger" style="width: 100%; margin-top: 1rem;" onclick="deleteBook()">🗑️ Delete Target Book from System</button>
+            </div>
+        </div>
+
+        <div>
+            <div class="admin-card" style="position: sticky; top: 2rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h3 style="margin: 0; border: none; padding: 0;">📋 Catalog & Agent Log</h3>
+                    <button class="btn" onclick="refreshLogs()">🔄 Refresh List</button>
+                </div>
+                <div id="logs" class="logs-area">Loading ontology content...</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    window.onload = function() {
+        refreshLogs();
+    };
+
+    function refreshLogs() {
+        fetch('/api/admin/dump?t=' + new Date().getTime())
+            .then(res => res.json())
+            .then(data => {
+                const logsDiv = document.getElementById('logs');
+                if(data.length === 0) {
+                    logsDiv.innerHTML = "<span style='color: #94a3b8;'>(No books available in the ontology)</span>";
+                    return;
+                }
+                let formattedData = data.map(text => text.replace(/\n/g, '<br>'));
+                logsDiv.innerHTML = formattedData.join('<br><hr><br>');
+            })
+            .catch(err => console.error("Error loading logs:", err));
+    }
+
+    function createBook() {
+        const id = document.getElementById('new-book-id').value.trim();
+        const format = document.getElementById('new-book-format').value;
+
+        if(!id) {
+            alert('Please enter a Book ID!');
+            return;
+        }
+
+        fetch(`/api/admin/createBook?id=${id}&format=${format}`)
+            .then(res => res.json())
+            .then(data => {
+                if(data.success) {
+                    document.getElementById('target-book').value = id;
+                    document.getElementById('new-book-id').value = '';
+                    refreshLogs();
+                    alert(`Successfully created new ${format} record: ${id}`);
+                } else {
+                    // Показва съобщението "Книгата вече съществува в онтологията!" изпратено от Java
+                    alert(data.message || "Error creating the book.");
+                }
+            })
+            .catch(err => {
+                console.error("Error creating book:", err);
+                alert("An error occurred while communicating with the server.");
+            });
+    }
+
+    function linkProperty(type, inputId) {
+        const target = document.getElementById('target-book').value.trim();
+        const value = document.getElementById(inputId).value.trim();
+
+        if(!target) {
+            alert('Please enter an ID in the "Target Book" field first!');
+            return;
+        }
+        if(!value) {
+            alert('Please enter a value for the property!');
+            return;
+        }
+
+        if (type === 'order' || type === 'year') {
+            const numericValue = parseInt(value, 10);
+            if (isNaN(numericValue) || numericValue <= 0) {
+                alert('Please enter a valid positive number greater than 0!');
+                return;
+            }
+        }
+
+        fetch(`/api/admin/link?type=${type}&target=${target}&val=${value}`)
+            .then(res => res.json())
+            .then(data => {
+                if(data.success) {
+                    // Изчистваме полето след успешен запис (ако е текстово поле, а не падащо меню)
+                    if(document.getElementById(inputId).tagName === 'INPUT') {
+                        document.getElementById(inputId).value = '';
+                    }
+                    refreshLogs();
+                } else {
+                    alert('Error saving to the ontology.');
+                }
+            });
+    }
+
+    function deleteBook() {
+        const target = document.getElementById('target-book').value.trim();
+        if(!target) {
+            alert('Please select a target book to delete!');
+            return;
+        }
+
+        if(confirm(`Are you sure you want to completely delete the book '${target}'?`)) {
+            fetch(`/api/admin/delete?target=${target}`)
+                .then(res => res.json())
+                .then(data => {
+                    if(data.success) {
+                        document.getElementById('target-book').value = '';
+                        refreshLogs();
+                        alert(`The book ${target} was successfully deleted.`);
+                    }
+                });
+        }
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Semantic Library</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="login-body">
+
+<div class="auth-container">
+    <div class="auth-header">
+        <h2>📚 Welcome</h2>
+        <p>Intelligent Semantic Recommendation System</p>
+    </div>
+
+    <div class="tabs">
+        <button class="tab-btn active" id="tab-login" onclick="switchTab('login')">Login</button>
+        <button class="tab-btn" id="tab-register" onclick="switchTab('register')">Register</button>
+    </div>
+
+    <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" placeholder="Enter your username" autocomplete="off">
+    </div>
+
+    <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="Enter password">
+    </div>
+
+    <button class="btn btn-submit" id="action-btn" onclick="performAction()">Login to System</button>
+
+    <div id="message"></div>
+</div>
+
+<script>
+    let currentMode = 'login'; // Can be 'login' or 'register'
+
+    function switchTab(mode) {
+        currentMode = mode;
+        document.getElementById('message').textContent = '';
+
+        const btnLogin = document.getElementById('tab-login');
+        const btnRegister = document.getElementById('tab-register');
+        const actionBtn = document.getElementById('action-btn');
+
+        if (mode === 'login') {
+            btnLogin.classList.add('active');
+            btnRegister.classList.remove('active');
+            actionBtn.textContent = 'Login to System';
+            actionBtn.style.background = 'var(--primary)';
+        } else {
+            btnRegister.classList.add('active');
+            btnLogin.classList.remove('active');
+            actionBtn.textContent = 'Register Me';
+            actionBtn.style.background = '#10b981'; // Green color for registration
+        }
+    }
+
+    function performAction() {
+        const user = document.getElementById('username').value.trim();
+        const pass = document.getElementById('password').value.trim();
+
+        if (!user || !pass) {
+            showMessage("Please fill in all fields!", "error");
+            return;
+        }
+
+        fetch(`/api/auth?action=${currentMode.toUpperCase()}&username=${encodeURIComponent(user)}&password=${encodeURIComponent(pass)}`)
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return res.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    if (currentMode === 'register') {
+                        showMessage("Registration successful! Redirecting to login...", "success");
+                        setTimeout(() => switchTab('login'), 1500);
+                    } else {
+                        showMessage("Login successful! Redirecting...", "success");
+
+                        setTimeout(() => {
+                            if (user.toLowerCase() === 'admin') {
+                                window.location.href = `admin.html`;
+                            } else {
+                                window.location.href = `main.html?user=${user}`;
+                            }
+                        }, 1000);
+                    }
+                } else {
+                    const errorTxt = currentMode === 'login'
+                        ? "Invalid username or password!"
+                        : "This username is already taken!";
+                    showMessage(errorTxt, "error");
+                }
+            })
+            .catch(err => {
+                showMessage("Error connecting to the server.", "error");
+                console.error(err);
+            });
+    }
+
+    function showMessage(text, type) {
+        const msgBox = document.getElementById('message');
+        msgBox.textContent = text;
+        msgBox.className = type;
+    }
+
+    document.getElementById('password').addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') {
+            performAction();
+        }
+    });
+</script>
+</body>
+</html>
